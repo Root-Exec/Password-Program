@@ -7,10 +7,10 @@ import java.util.*;
 public class PasswordManager {
         private StringBuffer password;
         private StringBuffer availableCharacters;
+        private String name;
         private int numLowerCase;
         private int numUpperCase;
         private int numNumbers;
-        private char pwType;
         private int numSpecialChars;
         final private int maxPasswordLen = 20;
 
@@ -19,53 +19,31 @@ public class PasswordManager {
             this.availableCharacters = new StringBuffer();
         }
 
-        PasswordManager(String pw) {
-            password = new StringBuffer();
-            availableCharacters = new StringBuffer();
-            password.append(pw);
+        void setPwName(String name) {
+            this.name = name;
         }
-
+        public void setPasswordParameters(int numLowerCase, int numUpperCase, int numNumbers, int numSpecialChars) {
+            this.numLowerCase = numLowerCase;
+            this.numUpperCase = numUpperCase;
+            this.numNumbers = numNumbers;
+            this.numSpecialChars = numSpecialChars;
+        }
+        String getPwName() { return name; }
         public String getPassword(){
         return password.toString();
     }
 
-        public void printPassword() {
-            System.out.println(this.password);
+        public void setDefinedPassword(String userDefinedPw) {
+            password.append(userDefinedPw);
         }
 
-        public void setPasswordParameters() {
-            Scanner userInput = new Scanner(System.in);
-            char input;
 
-            System.out.print("Enter (u)ser defined password; (r)andom defined password: ");
-            input = userInput.next().charAt(0);
-
-            while (input != 'u' && input != 'U' && input != 'r' && input != 'R') {
-                System.out.print("Invalid input. Enter 'u' for user defined password; 'r' for random defined password: ");
-                input = userInput.next().charAt(0);
-            }
-
-            if (input == 'u' || input ==  'U') setDefinedPassword();
-            else                               setRandomPassword();
-        }
-
-        private void setDefinedPassword() {
-            Scanner userInput = new Scanner(System.in);
-            while (true) {
-                System.out.print("Enter your password (password cannot contain a ':' character): ");
-                password.append(userInput.nextLine());
-                if (!password.toString().contains("[.]+:[.]+")) {
-                    break;
-                }
-            }
-        }
-
-        private void setRandomPassword() {
+        public void setRandomPassword() {
             Random randStream = new Random();
             Scanner userInput = new Scanner(System.in);
             int i;
             int len = 0;
-
+            /*
             System.out.print("Enter number of lower case characters: ");
             this.numLowerCase = userInput.nextInt();
             System.out.print("Enter number of upper case characters: ");
@@ -75,7 +53,7 @@ public class PasswordManager {
             System.out.print("Enter number of special characters: ");
             this.numSpecialChars = userInput.nextInt();
             System.out.println();
-
+            */
             for (i = 0; i < numLowerCase && len < maxPasswordLen; i++, len++)
                 availableCharacters.append((char) (randStream.nextInt(27) + 'a'));
 
@@ -97,7 +75,7 @@ public class PasswordManager {
                 availableCharacters.deleteCharAt(index);
                 len--;
             }
-            password.append(availableCharacters.charAt(0));
+
         }
 
 }
