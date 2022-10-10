@@ -1,4 +1,7 @@
-package programManagers;
+package programManagers.userInterfaceManager;
+
+import programManagers.FileManager.FileManager;
+import programManagers.PasswordManager.PasswordManager;
 
 import javax.swing.*;
 import java.awt.*;

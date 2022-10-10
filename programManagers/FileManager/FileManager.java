@@ -1,4 +1,4 @@
-package programManagers;
+package programManagers.FileManager;
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
@@ -14,7 +14,7 @@ public class FileManager {
     private int maxPasswordLen = 20;
     public Boolean fileStatus;
 
-    FileManager() {
+    public FileManager() {
 
         try {
             writer = new BufferedWriter(new FileWriter(fileName, true));

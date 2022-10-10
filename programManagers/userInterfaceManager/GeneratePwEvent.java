@@ -1,4 +1,8 @@
-package programManagers;
+package programManagers.userInterfaceManager;
+
+import programManagers.FileManager.FileManager;
+import programManagers.PasswordManager.InvalidPasswordNameException;
+import programManagers.PasswordManager.PasswordManager;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -11,11 +15,11 @@ public class GeneratePwEvent implements ActionListener {
     private JButton addDefinedPw;
     private JTextField userInputField;
     private JTextField userDefinedPwField;
-    private JFormattedTextField textFields[];
+    private JFormattedTextField[] textFields;
 
     public GeneratePwEvent(PasswordManager pwManager, FileManager fileManager, JButton addRandomPw,
                            JButton addDefinedPw, JTextField userInputField, JTextField userDefinedPwField,
-                           JFormattedTextField textField[]) {
+                           JFormattedTextField[] textField) {
         this.pwManager = pwManager;
         this.fileManager = fileManager;
         this.addRandomPw = addRandomPw;
@@ -28,7 +32,14 @@ public class GeneratePwEvent implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        pwManager.setPwName(userInputField.getText());
+
+        try {
+            pwManager.setPwName(userInputField.getText());
+        } catch (InvalidPasswordNameException ex) {
+            userInputField.setText("Invalid password name contains ':' character");
+            return;
+        }
+
         if (e.getSource() == addRandomPw && pwManager.getPwName().length() > 0) {
             pwManager.setPasswordParameters( ((Number) textFields[0].getValue()).intValue(),
                                              ((Number) textFields[1].getValue()).intValue(),
@@ -36,9 +47,16 @@ public class GeneratePwEvent implements ActionListener {
                                              ((Number) textFields[3].getValue()).intValue());
             pwManager.setRandomPassword();
         }
+
         if (e.getSource() == addDefinedPw && pwManager.getPwName().length() > 0) {
-            System.out.println("Add Defined Password button pressed: " + pwManager.getPwName());
-            pwManager.setDefinedPassword(userDefinedPwField.getText());
+
+            try {
+                pwManager.setDefinedPassword(userDefinedPwField.getText());
+            } catch (InvalidPasswordNameException ex) {
+                userDefinedPwField.setText("Invalid password, contains ':' character");
+            }
+        } else {
+            return;
         }
 
         fileManager.addPassword(pwManager.getPwName(), pwManager.getPassword());

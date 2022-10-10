@@ -1,6 +1,8 @@
-package programManagers;
+package programManagers.PasswordManager;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //object will be responsible for creating/updating passwords based off of parameters provided by user
 
@@ -14,29 +16,46 @@ public class PasswordManager {
         private int numSpecialChars;
         final private int maxPasswordLen = 20;
 
-        PasswordManager() {
+        public PasswordManager() {
             this.password = new StringBuffer();
             this.availableCharacters = new StringBuffer();
         }
 
-        void setPwName(String name) {
-            this.name = name;
+        public void setPwName(String name) throws InvalidPasswordNameException {
+
+            Pattern valid = Pattern.compile("[a-zA-Z]*+[\\d]*+:[a-zA-Z]*+[\\d]*+");
+            Matcher checkValid = valid.matcher(name);
+
+            if (!checkValid.matches()) {
+                this.name = name;
+            } else {
+                throw new InvalidPasswordNameException("Invalid password name (contains : character)");
+            }
         }
+
         public void setPasswordParameters(int numLowerCase, int numUpperCase, int numNumbers, int numSpecialChars) {
             this.numLowerCase = numLowerCase;
             this.numUpperCase = numUpperCase;
             this.numNumbers = numNumbers;
             this.numSpecialChars = numSpecialChars;
         }
-        String getPwName() { return name; }
+
+        public String getPwName() { return name; }
+
         public String getPassword(){
         return password.toString();
     }
 
-        public void setDefinedPassword(String userDefinedPw) {
-            password.append(userDefinedPw);
-        }
+        public void setDefinedPassword(String userDefinedPw) throws InvalidPasswordNameException {
+            Pattern valid = Pattern.compile("[a-zA-Z]*+[\\d]*+:[a-zA-Z]*+[\\d]*+");
+            Matcher checkValid = valid.matcher(userDefinedPw);
 
+            if (!checkValid.matches()) {
+                password.append(userDefinedPw);
+            } else {
+                throw new InvalidPasswordNameException("Invalid password name (contains : character)");
+            }
+        }
 
         public void setRandomPassword() {
             Random randStream = new Random();

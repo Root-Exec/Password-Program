@@ -1,14 +1,13 @@
-package programManagers;
+package programManagers.userInterfaceManager;
+
+import programManagers.FileManager.FileManager;
+import programManagers.PasswordManager.PasswordManager;
 
 import javax.swing.*;
-import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.FieldPosition;
 import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.ParsePosition;
 
 public class HandlerAddPwButton extends JButton implements ActionListener {
     private PasswordManager pwManager;
@@ -32,9 +31,9 @@ public class HandlerAddPwButton extends JButton implements ActionListener {
     private JLabel specialCharLabel;
     private JButton addRandomPw;
     private JButton addDefinedPw;
-    private JFormattedTextField textfields[];
+    private JFormattedTextField[] textfields;
     private final NumberFormat numFormat = NumberFormat.getInstance();
-    private final int MAXLEN = 20;
+    private final int MAXLEN = 25;
 
     public HandlerAddPwButton(PasswordManager pwManager, FileManager fileManager) {
         super("Add a Password");

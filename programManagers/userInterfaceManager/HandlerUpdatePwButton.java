@@ -1,4 +1,4 @@
-package programManagers;
+package programManagers.userInterfaceManager;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

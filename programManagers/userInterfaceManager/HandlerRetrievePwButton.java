@@ -1,10 +1,11 @@
-package programManagers;
+package programManagers.userInterfaceManager;
+
+import programManagers.FileManager.FileManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 public class HandlerRetrievePwButton extends JButton implements ActionListener {
 

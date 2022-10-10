@@ -4,7 +4,9 @@ package programManagers;
 //main program loop
 //responsible for object creation (file managers, password managers)
 
-import java.util.InputMismatchException;
+import programManagers.FileManager.FileManager;
+import programManagers.PasswordManager.PasswordManager;
+import programManagers.userInterfaceManager.UserInterfaceManager;
 
 public class MainManager {
 
@@ -13,10 +15,12 @@ public class MainManager {
         PasswordManager pwManager = new PasswordManager();
         FileManager fileManager = new FileManager();
         UserInterfaceManager userInterfaceManager = new UserInterfaceManager(pwManager, fileManager);
+
+        /*
         char userInput = '\0';
         String name = "\0";
 
-        /*
+
         while (userInput != 'q' && userInput != 'Q') {
 
             userInterfaceManager.printScreen();
