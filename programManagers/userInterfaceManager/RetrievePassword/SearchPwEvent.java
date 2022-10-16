@@ -1,6 +1,7 @@
-package programManagers.userInterfaceManager;
+package programManagers.userInterfaceManager.RetrievePassword;
 
 import programManagers.FileManager.FileManager;
+import programManagers.PasswordManager.PasswordManager;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -9,21 +10,21 @@ import java.awt.event.ActionListener;
 public class SearchPwEvent implements ActionListener {
 
     private FileManager fileManager;
+    private PasswordManager pwManager;
     private JTextField pwName;
     private JTextField results;
 
-    SearchPwEvent(FileManager fileManager, JTextField pwNameInput, JTextField results) {
+    public SearchPwEvent(FileManager fileManager, PasswordManager pwManager, JTextField pwNameInput, JTextField results) {
         this.fileManager = fileManager;
         this.pwName = pwNameInput;
+        this.pwManager = pwManager;
         this.results = results;
-        this.results.enableInputMethods(false);
+        results.enableInputMethods(false);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println(pwName);
+        pwName.setText(pwName.getText());
         results.setText(fileManager.retrievePassword(pwName.getText()));
-        fileManager.closeFiles();
-        fileManager = new FileManager();
     }
 }

@@ -6,19 +6,33 @@ import java.util.regex.Pattern;
 
 //object will be responsible for creating/updating passwords based off of parameters provided by user
 
-public class PasswordManager {
-        private StringBuffer password;
-        private StringBuffer availableCharacters;
+public final class PasswordManager {
+        private static int objectsCreated = 0;
+        private static StringBuffer password;
+        private static StringBuffer availableCharacters;
         private String name;
         private int numLowerCase;
         private int numUpperCase;
         private int numNumbers;
         private int numSpecialChars;
-        final private int maxPasswordLen = 20;
+        final private int MAXPASSWORDLENGTH = 20;
+        private static PasswordManager pwManager;
 
-        public PasswordManager() {
-            this.password = new StringBuffer();
-            this.availableCharacters = new StringBuffer();
+        private PasswordManager() {
+            password = new StringBuffer();
+            availableCharacters = new StringBuffer();
+            objectsCreated++;
+            pwManager = getPasswordManagerInstance();
+            name = "";
+        }
+
+        public static PasswordManager getPasswordManagerInstance() {
+            if (objectsCreated < 1) {
+                return new PasswordManager();
+            } else {
+                password = new StringBuffer();
+                return pwManager;
+            }
         }
 
         public void setPwName(String name) throws InvalidPasswordNameException {
@@ -43,46 +57,35 @@ public class PasswordManager {
         public String getPwName() { return name; }
 
         public String getPassword(){
-        return password.toString();
-    }
+            return password.toString();
+        }
 
         public void setDefinedPassword(String userDefinedPw) throws InvalidPasswordNameException {
-            Pattern valid = Pattern.compile("[a-zA-Z]*+[\\d]*+:[a-zA-Z]*+[\\d]*+");
-            Matcher checkValid = valid.matcher(userDefinedPw);
+            Pattern invalid = Pattern.compile("[a-zA-Z]*+[\\d]*+:[a-zA-Z]*+[\\d]*+");
+            Matcher checkInvalid = invalid.matcher(userDefinedPw);
 
-            if (!checkValid.matches()) {
+            if (!checkInvalid.matches() && userDefinedPw.length() < MAXPASSWORDLENGTH) {
                 password.append(userDefinedPw);
             } else {
-                throw new InvalidPasswordNameException("Invalid password name (contains : character)");
+                throw new InvalidPasswordNameException("Invalid password name. Must be less than 20 and not contain a :");
             }
         }
 
         public void setRandomPassword() {
             Random randStream = new Random();
-            Scanner userInput = new Scanner(System.in);
             int i;
             int len = 0;
-            /*
-            System.out.print("Enter number of lower case characters: ");
-            this.numLowerCase = userInput.nextInt();
-            System.out.print("Enter number of upper case characters: ");
-            this.numUpperCase = userInput.nextInt();
-            System.out.print("Enter number of numbers: ");
-            this.numNumbers = userInput.nextInt();
-            System.out.print("Enter number of special characters: ");
-            this.numSpecialChars = userInput.nextInt();
-            System.out.println();
-            */
-            for (i = 0; i < numLowerCase && len < maxPasswordLen; i++, len++)
+
+            for (i = 0; i < numLowerCase && len < MAXPASSWORDLENGTH; i++, len++)
                 availableCharacters.append((char) (randStream.nextInt(27) + 'a'));
 
-            for (i = 0; i < numUpperCase && len < maxPasswordLen; i++, len++)
+            for (i = 0; i < numUpperCase && len < MAXPASSWORDLENGTH; i++, len++)
                 availableCharacters.append((char) (randStream.nextInt(27) + 'A'));
 
-            for (i = 0; i < numNumbers && len < maxPasswordLen; i++, len++)
+            for (i = 0; i < numNumbers && len < MAXPASSWORDLENGTH; i++, len++)
                 availableCharacters.append((char)(randStream.nextInt(10) + '0'));
 
-            for (i = 0; i < numSpecialChars && len < maxPasswordLen; i++, len++)
+            for (i = 0; i < numSpecialChars && len < MAXPASSWORDLENGTH; i++, len++)
                 availableCharacters.append((char)(randStream.nextInt(16) + '!'));
 
 

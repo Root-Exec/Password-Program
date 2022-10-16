@@ -2,13 +2,15 @@ package programManagers.userInterfaceManager;
 
 import programManagers.FileManager.FileManager;
 import programManagers.PasswordManager.PasswordManager;
+import programManagers.userInterfaceManager.DeletePassword.HandlerDeletePwButton;
+import programManagers.userInterfaceManager.RetrievePassword.HandlerRetrievePwButton;
+import programManagers.userInterfaceManager.UpdatePassword.HandlerUpdatePwButton;
+import programManagers.userInterfaceManager.addPassword.HandlerAddPwButton;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
-import java.util.Scanner;
 
-public class UserInterfaceManager {
+public final class UserInterfaceManager {
     private JFrame mainWindow;
     public PasswordManager pwManager;
     public FileManager fileManager;
@@ -39,17 +41,17 @@ public class UserInterfaceManager {
 
         JPanel retrievePwPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 20));
         retrievePwPanel.setSize(50, 50);
-        JButton retrievePwButton = new HandlerRetrievePwButton(fileManager);
+        JButton retrievePwButton = new HandlerRetrievePwButton(fileManager, pwManager);
         retrievePwPanel.add(retrievePwButton);
 
         JPanel updatePwPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 20));
         updatePwPanel.setSize(50, 50);
-        JButton updatePwPanelButton = new HandlerUpdatePwButton();
+        JButton updatePwPanelButton = new HandlerUpdatePwButton(fileManager, pwManager);
         updatePwPanel.add(updatePwPanelButton);
 
         JPanel deletePwPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 20));
         updatePwPanel.setSize(50, 50);
-        JButton deletePwPanelButton = new HandlerDeletePwButton();
+        JButton deletePwPanelButton = new HandlerDeletePwButton(fileManager, pwManager);
         deletePwPanel.add(deletePwPanelButton);
 
         mainWindow.add(titlePanel);
@@ -60,49 +62,5 @@ public class UserInterfaceManager {
         mainWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
         mainWindow.pack();
         mainWindow.setVisible(true);
-    }
-
-    void printScreen() {
-        System.out.println("--------Password Keychain application--------");
-        System.out.println("Enter in the following:");
-        System.out.println("1: Add a password.");
-        System.out.println("2: Retrieve a password");
-        System.out.println("3: Update a password");
-        System.out.println("4: Delete a password");
-    }
-
-    char getUserInput (char userInput) {
-        Scanner input = new Scanner(System.in);
-        return input.nextLine().charAt(0);
-    }
-
-    String getUserInput (String name) {
-        Scanner input = new Scanner(System.in);
-        return input.nextLine();
-    }
-
-    void clearScreen() {
-        String os = "\0";
-        String[] winCmds = {"cls"};
-        String[] cmds = {"clear"};
-
-        try {
-            os = System.getProperty("os.name");
-            if (os.contains("Windows")) {
-                try {
-                    Runtime.getRuntime().exec(winCmds);
-                } catch (IOException e) {
-                    System.out.println("Invalid clear screen with System");
-                }
-            } else {
-                try {
-                    Runtime.getRuntime().exec(cmds);
-                } catch (IOException e) {
-                    System.out.println("Invalid clear screen with System");
-                }
-            }
-        } catch(Exception e) {
-            System.out.println("Invalid System Operating System inquiry for clear screen method");
-        }
     }
 }

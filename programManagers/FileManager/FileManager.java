@@ -1,18 +1,15 @@
 package programManagers.FileManager;
 import java.io.*;
-import java.util.*;
-import java.util.regex.*;
 
 //object will be responsible for writing, retrieving, and updating source file of passwords
 
-public class FileManager {
-    private String fileName = "Keychain.txt";
-    private String temporaryFile = "Temp.txt";
+public final class FileManager {
+    private final String fileName = "Keychain.txt";
+    private final String temporaryFile = "Temp.txt";
     private BufferedWriter writer;
-    private BufferedReader reader;
-
-    private int maxPasswordLen = 20;
+    public BufferedReader reader;
     public Boolean fileStatus;
+
 
     public FileManager() {
 
@@ -30,18 +27,28 @@ public class FileManager {
         }
     }
 
+
     public void addPassword(String name, String password) {
         StringBuffer line = new StringBuffer();
         line.append(name);
         line.append(":");
-        line.append(password);
+        line.append(password + "\n");
+
+        if (writer == null) {
+            try {
+                writer = new BufferedWriter(new FileWriter(fileName, true));
+            } catch (IOException e) {
+                System.out.println("Writer Failed");
+            }
+        }
 
         try {
-            writer.append(line + "\n");
+            writer.append(line);
             System.out.println("Save successful!");
         } catch (IOException e) {
-            System.out.println("Failed to save password data to source file");
+            System.out.println("Failed to save password data to source file in add password method of file manager class: " + e);
         }
+        saveFiles();
     }
 
     public String retrievePassword(String name) {
@@ -53,17 +60,22 @@ public class FileManager {
                 line = reader.readLine();
                 if (line != null) {
                     components = line.split(":");
-                    if (name.equals(components[0]))
+                    if (name.equals(components[0])) {
+                        saveFiles();
                         return components[1];
+                    }
                 } else {
+                    saveFiles();
                     return "Password not found!";
                 }
             } catch (IOException e) {
-                System.out.println("Could not read Keychain Data file");
+                System.out.println("Could not read Keychain Data file in retrieve password method: " + e);
                 return "";
             }
 
         } while (line != null);
+
+        saveFiles();
 
         return "Password Not Found!";
     }
@@ -131,24 +143,44 @@ public class FileManager {
             //close bufferedReader/bufferedWriter objects to use File objects
             originalFile = new File(fileName);
             tempFile = new File(temporaryFile);
-            return tempFile.renameTo(originalFile);
+            tempFile.renameTo(originalFile);
+            saveFiles();
+            return true;
         }
 
         System.out.println("Password name not found, file cannot be updated.");
         return false;
     }
 
-    public void closeFiles() {
+    private void saveFiles() {
+
+        closeFiles();
+        try {
+            writer = new BufferedWriter(new FileWriter(fileName, true));
+        } catch (IOException e) {
+            System.out.println("Writer Failed");
+        }
+
+        try {
+            reader = new BufferedReader(new FileReader(fileName));
+            fileStatus = true;
+        } catch (FileNotFoundException e) {
+            System.out.println("Reader Failed");
+        }
+
+    }
+
+    private void closeFiles() {
         try {
             writer.close();
         } catch (IOException e) {
-            System.out.println("Error closing writing stream");
+            System.out.println("Error closing writing stream: " + e);
         }
 
         try {
             reader.close();
         } catch (IOException e) {
-            System.out.println("Error closing reading stream");
+            System.out.println("Error closing reading stream: " + e);
         }
     }
 
@@ -170,19 +202,24 @@ public class FileManager {
                 line = reader.readLine();
                 if (line == null) break;
                 components = line.split(":");
+
             } catch (IOException e) {
-                System.out.println("Unable to read source file within deleter object");
+                System.out.println("Unable to read source file within deleter object: " + e);
+                saveFiles();
                 return deleteStatus;
             }
 
             if (!name.contentEquals(components[0])) {
                 try {
                     deleter.append(line + "\n");
+                    System.out.println("Wrote to temp.txt: " + line);
                 } catch (IOException e) {
-                    System.out.println("Unable to update source file within deleter object");
+                    System.out.println("Unable to update source file within deleter object: " + e);
+                    saveFiles();
                     return deleteStatus;
                 }
             } else {
+                System.out.println("Match found");
                 deleteStatus = true;
             }
         }
@@ -190,21 +227,24 @@ public class FileManager {
         try {
             deleter.close();
         } catch (IOException e) {
-            System.out.println("Cannot update source file within deleter object");
+            System.out.println("Cannot update source file within deleter object: " + e);
+            saveFiles();
             return deleteStatus;
         }
 
         try {
             writer.close();
         } catch (IOException e) {
-            System.out.println("IO File exception in deleter object");
+            saveFiles();
+            System.out.println("IO File exception in deleter object: " + e);
         }
 
         File originalFile = new File(fileName);
         File tempFile = new File(temporaryFile);
 
         deleteStatus = tempFile.renameTo(originalFile);
-
+        saveFiles();
+        System.out.println(deleteStatus);
         return deleteStatus;
     }
 

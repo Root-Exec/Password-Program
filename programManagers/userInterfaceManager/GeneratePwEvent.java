@@ -30,9 +30,9 @@ public class GeneratePwEvent implements ActionListener {
         this.textFields = textField.clone();
     }
 
+
     @Override
     public void actionPerformed(ActionEvent e) {
-
         try {
             pwManager.setPwName(userInputField.getText());
         } catch (InvalidPasswordNameException ex) {
@@ -41,6 +41,7 @@ public class GeneratePwEvent implements ActionListener {
         }
 
         if (e.getSource() == addRandomPw && pwManager.getPwName().length() > 0) {
+
             pwManager.setPasswordParameters( ((Number) textFields[0].getValue()).intValue(),
                                              ((Number) textFields[1].getValue()).intValue(),
                                              ((Number) textFields[2].getValue()).intValue(),
@@ -55,13 +56,9 @@ public class GeneratePwEvent implements ActionListener {
             } catch (InvalidPasswordNameException ex) {
                 userDefinedPwField.setText("Invalid password, contains ':' character");
             }
-        } else {
-            return;
         }
 
         fileManager.addPassword(pwManager.getPwName(), pwManager.getPassword());
-        fileManager.closeFiles();
-        fileManager = new FileManager();
-        pwManager = new PasswordManager();
+        pwManager = PasswordManager.getPasswordManagerInstance();
     }
 }

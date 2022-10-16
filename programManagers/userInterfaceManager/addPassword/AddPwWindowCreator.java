@@ -1,15 +1,15 @@
-package programManagers.userInterfaceManager;
+package programManagers.userInterfaceManager.addPassword;
 
 import programManagers.FileManager.FileManager;
 import programManagers.PasswordManager.PasswordManager;
+import programManagers.userInterfaceManager.GeneratePwEvent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 
-public class HandlerAddPwButton extends JButton implements ActionListener {
+public class AddPwWindowCreator extends JFrame {
+
     private PasswordManager pwManager;
     private FileManager fileManager;
     private JFrame addPwWindow;
@@ -35,15 +35,13 @@ public class HandlerAddPwButton extends JButton implements ActionListener {
     private final NumberFormat numFormat = NumberFormat.getInstance();
     private final int MAXLEN = 25;
 
-    public HandlerAddPwButton(PasswordManager pwManager, FileManager fileManager) {
+
+    public AddPwWindowCreator(FileManager fileManager, PasswordManager pwManager) {
+
         super("Add a Password");
         this.pwManager = pwManager;
         this.fileManager = fileManager;
-        this.addActionListener(this);
-    }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
         addPwWindow = new JFrame("Add Password");
         addPwWindow.setLayout(new BoxLayout(addPwWindow.getContentPane(), BoxLayout.Y_AXIS));
         addPwWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -117,4 +115,5 @@ public class HandlerAddPwButton extends JButton implements ActionListener {
         addPwWindow.setVisible(true);
 
     }
+
 }
