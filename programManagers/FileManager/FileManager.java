@@ -27,7 +27,6 @@ public final class FileManager {
         }
     }
 
-
     public void addPassword(String name, String password) {
         StringBuffer line = new StringBuffer();
         line.append(name);
@@ -122,7 +121,7 @@ public final class FileManager {
                 }
             } else {
                 try {
-                    updater.append(line);
+                    updater.append(line + '\n');
                 } catch (IOException e) {
                     System.out.println("Unable to update source file");
                     validSave = false;
@@ -148,7 +147,6 @@ public final class FileManager {
             return true;
         }
 
-        System.out.println("Password name not found, file cannot be updated.");
         return false;
     }
 
@@ -212,14 +210,12 @@ public final class FileManager {
             if (!name.contentEquals(components[0])) {
                 try {
                     deleter.append(line + "\n");
-                    System.out.println("Wrote to temp.txt: " + line);
                 } catch (IOException e) {
                     System.out.println("Unable to update source file within deleter object: " + e);
                     saveFiles();
                     return deleteStatus;
                 }
             } else {
-                System.out.println("Match found");
                 deleteStatus = true;
             }
         }
@@ -244,7 +240,7 @@ public final class FileManager {
 
         deleteStatus = tempFile.renameTo(originalFile);
         saveFiles();
-        System.out.println(deleteStatus);
+
         return deleteStatus;
     }
 

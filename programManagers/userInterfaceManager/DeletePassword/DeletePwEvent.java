@@ -6,16 +6,16 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class deletePwEvent implements ActionListener {
+public class DeletePwEvent implements ActionListener {
 
     private FileManager fileManager;
     private JTextField pwName;
     private JTextField results;
 
-    public deletePwEvent (FileManager fileManager, JTextField pwName, JTextField results) {
+    public DeletePwEvent(FileManager fileManager, JTextField pwName, JTextField results) {
         this.fileManager = fileManager;
-        this.pwName = pwName;
         this.results = results;
+        this.pwName = pwName;
     }
 
     @Override
@@ -26,6 +26,7 @@ public class deletePwEvent implements ActionListener {
         } else {
             results.setText("Could not delete password");
         }
+
     }
 
 }
