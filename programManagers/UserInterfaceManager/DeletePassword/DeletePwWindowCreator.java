@@ -1,12 +1,10 @@
-package programManagers.userInterfaceManager.DeletePassword;
+package programManagers.UserInterfaceManager.DeletePassword;
 
 import programManagers.FileManager.FileManager;
 import programManagers.PasswordManager.PasswordManager;
-import programManagers.userInterfaceManager.RetrievePassword.SearchPwWindowCreator;
-import programManagers.userInterfaceManager.RetrievePassword.SearchWindowPanel;
+import programManagers.UserInterfaceManager.RetrievePassword.SearchWindowPanel;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class DeletePwWindowCreator extends JFrame {
         FileManager fileManager;

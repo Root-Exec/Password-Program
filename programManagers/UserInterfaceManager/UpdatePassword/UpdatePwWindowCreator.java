@@ -1,11 +1,8 @@
-package programManagers.userInterfaceManager.UpdatePassword;
-
+package programManagers.UserInterfaceManager.UpdatePassword;
 import programManagers.FileManager.FileManager;
 import programManagers.PasswordManager.PasswordManager;
-import programManagers.userInterfaceManager.GeneratePwEvent;
-import programManagers.userInterfaceManager.RetrievePassword.SearchWindowPanel;
-import programManagers.userInterfaceManager.addPassword.AddPasswordPanel;
-import programManagers.userInterfaceManager.addPassword.AddPwWindowCreator;
+import programManagers.UserInterfaceManager.RetrievePassword.SearchWindowPanel;
+import programManagers.UserInterfaceManager.addPassword.AddPasswordPanel;
 
 import javax.swing.*;
 
@@ -34,7 +31,7 @@ public class UpdatePwWindowCreator extends JFrame {
 
             updatePwAction = new UpdatePwEvent(pwManager, fileManager, addPwPanel.getAddRandomPwButton(),
                                                addPwPanel.getAddDefinedPwButton(), addPwPanel.getUserInputField(),
-                                               addPwPanel.getUserDefinedPwField(), addPwPanel.getTextfields());
+                                               addPwPanel.getUserDefinedPwField(), addPwPanel.getTextFields());
 
             addPwPanel.getAddRandomPwButton().removeActionListener(addPwPanel.generatePwAction);
             addPwPanel.getAddDefinedPwButton().removeActionListener(addPwPanel.generatePwAction);

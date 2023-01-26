@@ -1,4 +1,4 @@
-package programManagers.userInterfaceManager.UpdatePassword;
+package programManagers.UserInterfaceManager.UpdatePassword;
 
 import programManagers.FileManager.FileManager;
 import programManagers.PasswordManager.InvalidPasswordNameException;
@@ -31,12 +31,8 @@ public class UpdatePwEvent implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        try {
-            pwManager.setPwName(userInputField.getText());
-        } catch (InvalidPasswordNameException ex) {
-            userInputField.setText("Invalid password name contains ':' character");
-            return;
-        }
+
+        pwManager.setPwName(userInputField.getText());
 
         if (e.getSource() == addRandomPw && pwManager.getPwName().length() > 0) {
 
@@ -48,16 +44,23 @@ public class UpdatePwEvent implements ActionListener {
         }
 
         if (e.getSource() == addDefinedPw && pwManager.getPwName().length() > 0) {
-
-            try {
-                pwManager.setDefinedPassword(userDefinedPwField.getText());
-            } catch (InvalidPasswordNameException ex) {
-                userDefinedPwField.setText("Invalid password, contains ':' character");
-            }
+            pwManager.setDefinedPassword(userDefinedPwField.getText());
         }
 
-        fileManager.updateDatabase(pwManager.getPwName() + ":" + pwManager.getPassword() + "\n",
+        if (pwManager.getPwName().length() == 0) {
+            userInputField.setText("Invalid password name. 0 < Name length < 20");
+            pwManager = new PasswordManager();
+            return;
+        }
+
+        if (pwManager.getPassword().length() == 0) {
+            userDefinedPwField.setText("Password cannot contain ':' and must be less than 20 characters");
+            pwManager = new PasswordManager();
+            return;
+        }
+
+        fileManager.updateDatabase(pwManager.getPwName() + ":" + pwManager.getPassword(),
                                    pwManager.getPwName());
-        pwManager = PasswordManager.getPasswordManagerInstance();
+        pwManager = new PasswordManager();
     }
 }

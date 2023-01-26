@@ -1,8 +1,8 @@
-package programManagers.userInterfaceManager.addPassword;
+package programManagers.UserInterfaceManager.addPassword;
 
 import programManagers.FileManager.FileManager;
 import programManagers.PasswordManager.PasswordManager;
-import programManagers.userInterfaceManager.GeneratePwEvent;
+import programManagers.UserInterfaceManager.GeneratePwEvent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,7 +52,7 @@ public class AddPasswordPanel extends JPanel {
         userDefinedPwLine = new JPanel(new FlowLayout());
         definedPw = new JLabel("For User Defined Password: ");
         userDefinedPwLine.add(definedPw);
-        userDefinedPwField = new JTextField(MAXLEN);
+        userDefinedPwField = new JTextField(MAXLEN + 5);
         userDefinedPwLine.add(userDefinedPwField);
         addDefinedPw = new JButton("Generate User Defined Password");
         userDefinedPwLine.add(addDefinedPw);
@@ -67,24 +67,28 @@ public class AddPasswordPanel extends JPanel {
         lowerCaseLabel = new JLabel("Lower case: ");
         lowerCaseInput = new JFormattedTextField(numFormat);
         lowerCaseInput.setColumns(2);
+        lowerCaseInput.setValue(0);
         randomPwLine.add(lowerCaseLabel);
         randomPwLine.add(lowerCaseInput);
 
         upperCaseLabel = new JLabel("Upper case: ");
         upperCaseInput = new JFormattedTextField(numFormat);
         upperCaseInput.setColumns(2);
+        upperCaseInput.setValue(0);
         randomPwLine.add(upperCaseLabel);
         randomPwLine.add(upperCaseInput);
 
         numbersLabel = new JLabel("Numbers: ");
         numbersInput = new JFormattedTextField(numFormat);
         numbersInput.setColumns(2);
+        numbersInput.setValue(0);
         randomPwLine.add(numbersLabel);
         randomPwLine.add(numbersInput);
 
         specialCharLabel = new JLabel("Special Characters: ");
         specialCharInput = new JFormattedTextField(numFormat);
         specialCharInput.setColumns(2);
+        specialCharInput.setValue(0);
         randomPwLine.add(specialCharLabel);
         randomPwLine.add(specialCharInput);
 
@@ -95,7 +99,7 @@ public class AddPasswordPanel extends JPanel {
         textfields[3] = specialCharInput;
 
         addRandomPw = new JButton("Generate Random Password");
-        generatePwAction = new GeneratePwEvent(pwManager, fileManager, addRandomPw,
+        generatePwAction = new GeneratePwEvent(this.pwManager, this.fileManager, addRandomPw,
                 addDefinedPw, userInputField, userDefinedPwField,
                 textfields);
 
@@ -115,7 +119,7 @@ public class AddPasswordPanel extends JPanel {
         return addDefinedPw;
     }
 
-    public JFormattedTextField[] getTextfields() {
+    public JFormattedTextField[] getTextFields() {
         return textfields;
     }
 

@@ -4,46 +4,36 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//object will be responsible for creating/updating passwords based off of parameters provided by user
+/* The password manager is responsible for creating the passwords and temporarily storing them until they can be
+* written to the source file via the File Manager. The password manager also validates proper password rules
+* by using regex pattern match. Once the Password Manager creates the password (whether user defined or random),
+* it will store it and then the caller will utilize these get methods to send to the File Manager for storing.
+ */
 
 public final class PasswordManager {
-        private static int objectsCreated = 0;
-        private static StringBuffer password;
-        private static StringBuffer availableCharacters;
+
+        private StringBuffer password;
+        private StringBuffer availableCharacters;
         private String name;
         private int numLowerCase;
         private int numUpperCase;
         private int numNumbers;
         private int numSpecialChars;
         final private int MAXPASSWORDLENGTH = 20;
-        private static PasswordManager pwManager;
 
-        private PasswordManager() {
-            password = new StringBuffer();
-            availableCharacters = new StringBuffer();
-            objectsCreated++;
-            pwManager = getPasswordManagerInstance();
-            name = "";
+        public PasswordManager() {
+            this.password = new StringBuffer();
+            this.availableCharacters = new StringBuffer();
+            this.name = "";
         }
 
-        public static PasswordManager getPasswordManagerInstance() {
-            if (objectsCreated < 1) {
-                return new PasswordManager();
-            } else {
-                password = new StringBuffer();
-                return pwManager;
-            }
-        }
-
-        public void setPwName(String name) throws InvalidPasswordNameException {
+        public void setPwName(String name) {
 
             Pattern valid = Pattern.compile("[a-zA-Z]*+[\\d]*+:[a-zA-Z]*+[\\d]*+");
             Matcher checkValid = valid.matcher(name);
 
-            if (!checkValid.matches()) {
+            if (!checkValid.matches() && name.length() > 0 && name.length() < MAXPASSWORDLENGTH) {
                 this.name = name;
-            } else {
-                throw new InvalidPasswordNameException("Invalid password name (contains : character)");
             }
         }
 
@@ -60,14 +50,12 @@ public final class PasswordManager {
             return password.toString();
         }
 
-        public void setDefinedPassword(String userDefinedPw) throws InvalidPasswordNameException {
+        public void setDefinedPassword(String userDefinedPw) {
             Pattern invalid = Pattern.compile("[a-zA-Z]*+[\\d]*+:[a-zA-Z]*+[\\d]*+");
             Matcher checkInvalid = invalid.matcher(userDefinedPw);
 
-            if (!checkInvalid.matches() && userDefinedPw.length() < MAXPASSWORDLENGTH) {
+            if (!(checkInvalid.matches() && userDefinedPw.length() < MAXPASSWORDLENGTH && userDefinedPw.length() > 0)) {
                 password.append(userDefinedPw);
-            } else {
-                throw new InvalidPasswordNameException("Invalid password name. Must be less than 20 and not contain a :");
             }
         }
 
@@ -90,7 +78,7 @@ public final class PasswordManager {
 
 
             int index;
-            len--;
+
             while (len > 0) {
                 index = randStream.nextInt(len);
                 password.append(availableCharacters.charAt(index));

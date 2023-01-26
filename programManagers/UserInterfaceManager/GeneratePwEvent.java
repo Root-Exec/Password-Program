@@ -1,4 +1,4 @@
-package programManagers.userInterfaceManager;
+package programManagers.UserInterfaceManager;
 
 import programManagers.FileManager.FileManager;
 import programManagers.PasswordManager.InvalidPasswordNameException;
@@ -16,6 +16,8 @@ public class GeneratePwEvent implements ActionListener {
     private JTextField userInputField;
     private JTextField userDefinedPwField;
     private JFormattedTextField[] textFields;
+    private String existingPwError = "Password exists in database";
+    private String invalidPwCharacterError = "Invalid password. No ':' and less than 20 characters";
 
     public GeneratePwEvent(PasswordManager pwManager, FileManager fileManager, JButton addRandomPw,
                            JButton addDefinedPw, JTextField userInputField, JTextField userDefinedPwField,
@@ -33,14 +35,16 @@ public class GeneratePwEvent implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        try {
-            pwManager.setPwName(userInputField.getText());
-        } catch (InvalidPasswordNameException ex) {
-            userInputField.setText("Invalid password name contains ':' character");
-            return;
+
+        pwManager.setPwName(userInputField.getText());
+
+        if (pwManager.getPwName().length() == 0) {
+                userInputField.setText("Input password name here");
+                pwManager = new PasswordManager();
+                return;
         }
 
-        if (e.getSource() == addRandomPw && pwManager.getPwName().length() > 0) {
+        if (e.getSource() == addRandomPw) {
 
             pwManager.setPasswordParameters( ((Number) textFields[0].getValue()).intValue(),
                                              ((Number) textFields[1].getValue()).intValue(),
@@ -49,16 +53,21 @@ public class GeneratePwEvent implements ActionListener {
             pwManager.setRandomPassword();
         }
 
-        if (e.getSource() == addDefinedPw && pwManager.getPwName().length() > 0) {
+        if (e.getSource() == addDefinedPw) {
 
-            try {
-                pwManager.setDefinedPassword(userDefinedPwField.getText());
-            } catch (InvalidPasswordNameException ex) {
-                userDefinedPwField.setText("Invalid password, contains ':' character");
+            pwManager.setDefinedPassword(userDefinedPwField.getText());
+
+            if (pwManager.getPassword().length() < 1 || pwManager.getPassword().length() > 20) {
+                userDefinedPwField.setText(invalidPwCharacterError);
+                pwManager = new PasswordManager();
+                return;
             }
+
         }
 
-        fileManager.addPassword(pwManager.getPwName(), pwManager.getPassword());
-        pwManager = PasswordManager.getPasswordManagerInstance();
+        if (!fileManager.addPassword(pwManager.getPwName(), pwManager.getPassword())) {
+            userInputField.setText(existingPwError);
+        }
+        pwManager = new PasswordManager();
     }
 }

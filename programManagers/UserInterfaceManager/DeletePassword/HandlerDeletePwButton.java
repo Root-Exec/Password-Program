@@ -1,4 +1,4 @@
-package programManagers.userInterfaceManager.DeletePassword;
+package programManagers.UserInterfaceManager.DeletePassword;
 
 import programManagers.FileManager.FileManager;
 import programManagers.PasswordManager.PasswordManager;

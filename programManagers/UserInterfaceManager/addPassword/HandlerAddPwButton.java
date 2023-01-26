@@ -1,8 +1,7 @@
-package programManagers.userInterfaceManager.addPassword;
+package programManagers.UserInterfaceManager.addPassword;
 
 import programManagers.FileManager.FileManager;
 import programManagers.PasswordManager.PasswordManager;
-import programManagers.userInterfaceManager.addPassword.AddPwWindowCreator;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

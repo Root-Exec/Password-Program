@@ -1,4 +1,4 @@
-package programManagers.userInterfaceManager.addPassword;
+package programManagers.UserInterfaceManager.addPassword;
 
 import programManagers.FileManager.FileManager;
 import programManagers.PasswordManager.PasswordManager;

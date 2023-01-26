@@ -1,7 +1,10 @@
 package programManagers.FileManager;
 import java.io.*;
 
-//object will be responsible for writing, retrieving, and updating source file of passwords
+/* File Manager is responsible for writing, retrieving, saving, opening, and closing the source file of passwords.
+* No other objects are to have access to the source file and must use FileManager methods to interact with
+* the source file.
+ */
 
 public final class FileManager {
     private final String fileName = "Keychain.txt";
@@ -9,6 +12,7 @@ public final class FileManager {
     private BufferedWriter writer;
     public BufferedReader reader;
     public Boolean fileStatus;
+    private String pwNotFound = "Password Not Found!";
 
 
     public FileManager() {
@@ -27,11 +31,18 @@ public final class FileManager {
         }
     }
 
-    public void addPassword(String name, String password) {
+    public boolean addPassword(String name, String password) {
+
+        String checkForExistingPassword = retrievePassword(name);
+
+        if (!checkForExistingPassword.contentEquals(pwNotFound)) {
+            return false;
+        }
+
         StringBuffer line = new StringBuffer();
         line.append(name);
         line.append(":");
-        line.append(password + "\n");
+        line.append(password).append("\n");
 
         if (writer == null) {
             try {
@@ -48,9 +59,12 @@ public final class FileManager {
             System.out.println("Failed to save password data to source file in add password method of file manager class: " + e);
         }
         saveFiles();
+
+        return true;
     }
 
     public String retrievePassword(String name) {
+
         String line;
         String[] components;
 
@@ -65,7 +79,7 @@ public final class FileManager {
                     }
                 } else {
                     saveFiles();
-                    return "Password not found!";
+                    return pwNotFound;
                 }
             } catch (IOException e) {
                 System.out.println("Could not read Keychain Data file in retrieve password method: " + e);
@@ -76,7 +90,7 @@ public final class FileManager {
 
         saveFiles();
 
-        return "Password Not Found!";
+        return pwNotFound;
     }
 
     public Boolean updateDatabase(String writeToFile, String name) {
@@ -113,7 +127,7 @@ public final class FileManager {
 
             if (lineComponents[0].equals(name)) {
                 try {
-                    updater.append(writeToFile);
+                    updater.append(writeToFile).append(String.valueOf('\n'));
                     validSave = true;
                 } catch (IOException e) {
                     System.out.println("Unable to update source file");
@@ -121,7 +135,7 @@ public final class FileManager {
                 }
             } else {
                 try {
-                    updater.append(line + '\n');
+                    updater.append(line).append(String.valueOf('\n'));
                 } catch (IOException e) {
                     System.out.println("Unable to update source file");
                     validSave = false;
@@ -142,9 +156,14 @@ public final class FileManager {
             //close bufferedReader/bufferedWriter objects to use File objects
             originalFile = new File(fileName);
             tempFile = new File(temporaryFile);
-            tempFile.renameTo(originalFile);
+
+            if (tempFile.renameTo(originalFile)) {
+                saveFiles();
+                return true;
+            }
+
             saveFiles();
-            return true;
+            return false;
         }
 
         return false;

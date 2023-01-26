@@ -1,8 +1,7 @@
-package programManagers.userInterfaceManager.RetrievePassword;
+package programManagers.UserInterfaceManager.RetrievePassword;
 
 import programManagers.FileManager.FileManager;
 import programManagers.PasswordManager.PasswordManager;
-import programManagers.userInterfaceManager.RetrievePassword.SearchPwWindowCreator;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

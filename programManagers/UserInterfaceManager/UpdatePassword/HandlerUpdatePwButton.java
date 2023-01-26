@@ -1,4 +1,4 @@
-package programManagers.userInterfaceManager.UpdatePassword;
+package programManagers.UserInterfaceManager.UpdatePassword;
 
 import programManagers.FileManager.FileManager;
 import programManagers.PasswordManager.PasswordManager;
